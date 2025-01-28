@@ -10,6 +10,7 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  final _controller = TextEditingController();
   List todolist = [
     ['Stading', false],
     ['playing', false],
@@ -20,11 +21,27 @@ class _HomepageState extends State<Homepage> {
     });
   }
 
+  // creating a new task and save it
+  void saveNewTask() {
+    setState(() {
+      todolist.add([_controller.text, false]);
+      _controller.clear();
+    });
+    Navigator.of(context).pop();
+  }
+
   void createnewtask() {
     showDialog(
       context: context,
       builder: (context) {
-        return DialogBox();
+        return DialogBox(
+          controller: _controller,
+          onSave: saveNewTask,
+          onCancel: () {
+            _controller.clear(); // تنظيف النص
+            Navigator.of(context).pop(); // إغلاق مربع الحوار
+          },
+        );
       },
     );
   }
